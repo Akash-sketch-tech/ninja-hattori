@@ -86,6 +86,9 @@ app.post('/api/auth/register', async (req, res) => {
     });
   } catch (err) {
     console.error('Registration error:', err);
+    if (err.code === 'SQLITE_CONSTRAINT' || (err.message && err.message.includes('UNIQUE constraint failed'))) {
+      return res.status(400).json({ error: 'An account with this email already exists. Please sign in.' });
+    }
     res.status(500).json({ error: 'Internal server error during registration.' });
   }
 });

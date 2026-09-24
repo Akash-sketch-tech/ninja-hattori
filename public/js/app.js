@@ -200,9 +200,13 @@ async function handleAuthSubmit(e) {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
   const name = document.getElementById('auth-name').value.trim();
+  const submitBtn = document.getElementById('auth-submit-btn');
 
   const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
   const bodyData = authMode === 'register' ? { name, email, password } : { email, password };
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
 
   try {
     const res = await fetch(endpoint, {
@@ -229,6 +233,9 @@ async function handleAuthSubmit(e) {
     fetchSensorRecords(currentPage);
   } catch (err) {
     showAuthError('Network error. Could not connect to server.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
   }
 }
 
